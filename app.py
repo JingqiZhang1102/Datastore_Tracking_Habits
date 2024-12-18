@@ -9,7 +9,7 @@ import os
 os.environ["GCLOUD_PROJECT"] = "datastore-tutorial-445100"
 
 app = Flask(__name__)
-# app.wsgi_app = wrap_wsgi_app(app.wsgi_app) # this is the first place where RPC Call error was raised
+app.wsgi_app = wrap_wsgi_app(app.wsgi_app)
 
 # for session to record user_id
 app.secret_key = os.urandom(24)
@@ -36,9 +36,17 @@ def log_habit():
     # with front end, comment out for now
     data = request.get_json()  # Parse JSON payload
     # user_id = data.get('user_id')
+
+    # grab user id from the current session
+    # since this page will be after log-in or register
     if 'user_id' in session:
         user_id = session['user_id']
+    else:
+        return jsonify({"success": False, "message": "User ID not properly recorded in session!"}), 404
+    
+    # get habit id from the request
     habit_id = data.get('habit_id')
+    # get date info
     today = datetime.now()
     short_today = f"{today.year}_{today.month}_{today.day}"
     
@@ -49,8 +57,7 @@ def log_habit():
     # keys for memcache: memcache currently commented out due to RPC call error
     streak_cache_key = f"streak_{user_id}_{habit_id}"
     month_cache_key = f"calendar_{user_id}_{habit_id}_{today.month}_{today.year}"
-    # print(streak_cache_key)
-    # print(month_cache_key)
+    print(streak_cache_key, month_cache_key)
 
     # update database
     # key = datastore_client.key(kind, name)
@@ -63,7 +70,7 @@ def log_habit():
     # Update Streak in Memcache
     # streak = calculate_streak(user_id, habit_id)
     streak = 1
-    # memcache.set(streak_cache_key, streak, time=3600) # save for 1 hr
+    memcache.set(key=streak_cache_key, value=streak, time=3600) # save for 1 hr # this is the first place where RPC Call error was raised
 
     # Update Logged Days in Memcache
     # logged_days = memcache.get(month_cache_key) or set()

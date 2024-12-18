@@ -26,6 +26,9 @@
     </form>
 
     <!-- Delete Today's Habit -->
+    <button id="logoutButton">Log Out</button>
+
+    <!-- Delete Today's Habit -->
     <!-- <button id="deleteButton">Delete Today's Habit</button> -->
 
     <!-- Calendar Visualization -->
@@ -65,6 +68,12 @@
             } else {
                 alert("Error logging habit!");
             }
+        });
+
+        // Log our from current account
+        // go back to home page (login or register)
+        logoutButton.addEventListener("click", async () => {
+            window.location.href = "/";
         });
 
         // Delete Today's Habit
