@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Habit Tracker</title>
+    <style>
+        .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+        .day { padding: 10px; text-align: center; border: 1px solid #ddd; }
+        .logged { background-color: lightgreen; }
+        .header { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Habit Tracker</h1>
+    
+    <!-- Log Habit -->
+    <form id="logForm">
+        <!-- Dropdown menu for selecting a habit -->
+        <select id="habit_id" required>
+            <option value="" disabled selected>Select a Habit</option>
+            <option value="exercise">Exercise</option>
+            <option value="breakfast">Have Breakfast</option>
+            <option value="hydration">Hydration</option>
+            <option value="reading">Reading</option>
+        </select>
+        <button type="submit">Log Habit</button>
+    </form>
+
+    <!-- Delete Today's Habit -->
+    <!-- <button id="deleteButton">Delete Today's Habit</button> -->
+
+    <!-- Calendar Visualization -->
+    <!-- <h2>Calendar View</h2>
+    <div id="calendar" class="calendar"></div> -->
+
+    <script>
+        const logForm = document.getElementById("logForm");
+        //const deleteButton = document.getElementById("deleteButton");
+        //const calendarDiv = document.getElementById("calendar");
+
+        // Log Habit
+        logForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            // collect data from frontend
+            const formData = new FormData(logForm);
+
+            // get required elements
+            //const userId = document.getElementById("user_id").value;
+            const habitId = document.getElementById("habit_id").value;
+
+            // Make a POST request to the Flask backend
+            const response = await fetch('/log_habit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    //user_id: userId,
+                    habit_id: habitId
+                })
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                alert(result.message);
+            } else {
+                alert("Error logging habit!");
+            }
+        });
+
+        // Delete Today's Habit
+        deleteButton.addEventListener("click", async () => {
+            const formData = new FormData(logForm);
+            await fetch('/delete_today_habit', { method: "POST", body: formData });
+            alert("Today's habit deleted!");
+        });
+
+        // Calendar View
+        async function fetchCalendar() {
+            const user_id = document.getElementById("user_id").value;
+            const habit_id = document.getElementById("habit_id").value;
+            const response = await fetch(`/get_calendar_logs?user_id=${user_id}&habit_id=${habit_id}`);
+            const data = await response.json();
+
+            calendarDiv.innerHTML = "";
+            for (let day = 1; day <= 31; day++) {
+                const cell = document.createElement("div");
+                cell.textContent = day;
+                cell.classList.add("day");
+                if (data.logged_days.includes(day)) cell.classList.add("logged");
+                calendarDiv.appendChild(cell);
+            }
+        }
+
+        logForm.addEventListener("submit", fetchCalendar);
+        deleteButton.addEventListener("click", fetchCalendar);
+    </script>
+</body>
+</html>

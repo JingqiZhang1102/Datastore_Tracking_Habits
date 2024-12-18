@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Habit Tracker</title>
+    <style>
+        .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+        .day { padding: 10px; text-align: center; border: 1px solid #ddd; }
+        .logged { background-color: lightgreen; }
+        .header { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Habit Tracker</h1>
+    
+    <!-- Log Habit -->
+    <form id="regForm">
+        <input type="text" id="user_id" placeholder="User ID" required>
+        <input type="text" id="user_pwd" placeholder="Password" required>
+        <button type="submit">Register</button>
+    </form>
+
+    <script>
+        const regForm = document.getElementById("regForm");
+
+        // Register for new user info
+        regForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            // collect data from frontend
+            const formData = new FormData(regForm);
+
+            // get required elements
+            const userId = document.getElementById("user_id").value;
+            const userPwd = document.getElementById("user_pwd").value;
+
+            // Send credentials to the backend
+            fetch('/user_register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    user_id: userId, 
+                    user_pwd: userPwd })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect to another HTML page on success
+                    window.location.href = "/log_page";
+                } else {
+                    // Show error popup
+                    alert("Error: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error during login:", error);
+                alert("An unexpected error occurred.");
+            });
+        });
+    </script>
+</body>
+</html>
