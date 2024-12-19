@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>History Data</title>
+    <style>
+        .day { padding: 10px; text-align: center; border: 1px solid #ddd; }
+        .logged { background-color: lightgreen; }
+        .header { font-weight: bold; }
+        /* .data-window{ max-height: 300px; overflow-y: auto; padding: 10px; background-color: #f9f9f9;} */
+    </style>
+</head>
+<body>
+    <h1></h1>
+
+    <!-- Historical Data Display -->
+    <h1>History Data</h1>
+    <form id="histForm" method="GET">
+        <select id="hist_habit_id" required>
+            <option value="" disabled selected>Select a Habit</option>
+            <option value="exercise">Exercise</option>
+            <option value="breakfast">Have Breakfast</option>
+            <option value="hydration">Hydration</option>
+            <option value="reading">Reading</option>
+        </select>
+        <button type="submit">Display historical data</button>
+    </form>
+
+    <script>
+        const histForm = document.getElementById("histForm");
+
+        histForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            //alert("entered histform event listener")
+
+            // collect data from frontend
+            const habitId = document.getElementById("hist_habit_id").value;
+            
+            //const dataWindow = document.getElementById("data-window");
+
+            if (!habitId) {
+                alert("Please select a habit!");
+                return;
+            }
+            
+            // BUG in this try clause
+            // entered catch error clause
+            // use POST since I want to use body in the fetch API
+            try {
+                const response = await fetch('/hist_habit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        habit_id: habitId
+                    })
+                });
+
+                // alert(response.ok);
+                // alert(response.status);
+
+                // fetch data
+                const data = await response.json();
+
+                const alert_data = [];
+
+                data.forEach(item => {
+                    alert_data.push(item.date)
+                })
+                // the hist data will be printed in the alert pop-up window
+                alert(alert_data)
+
+            } catch (error) {
+                alert(error.message);
+                console.error(error.message);
+            }
+        });
+
+    </script>
+</body>
+</html>

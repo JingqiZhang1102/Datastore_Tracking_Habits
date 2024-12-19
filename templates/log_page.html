@@ -7,6 +7,7 @@
         .day { padding: 10px; text-align: center; border: 1px solid #ddd; }
         .logged { background-color: lightgreen; }
         .header { font-weight: bold; }
+        .data-window{ max-height: 300px; overflow-y: auto; padding: 10px; background-color: #f9f9f9;}
     </style>
 </head>
 <body>
@@ -25,20 +26,35 @@
         <button type="submit">Log Habit</button>
     </form>
 
-    <!-- Delete Today's Habit -->
+    <!-- Log Out from Current Account -->
     <button id="logoutButton">Log Out</button>
+
+    <!-- Head to history data page -->
+    <button id="histdataButton">Check History Data</button>
 
     <!-- Delete Today's Habit -->
     <!-- <button id="deleteButton">Delete Today's Habit</button> -->
 
-    <!-- Calendar Visualization -->
-    <!-- <h2>Calendar View</h2>
-    <div id="calendar" class="calendar"></div> -->
+    <!-- Historical Data Display -->
+    <h1>Historical Data</h1>
+    <form id="histForm">
+        <select id="hist_habit_id" required>
+            <option value="" disabled selected>Select a Habit</option>
+            <option value="exercise">Exercise</option>
+            <option value="breakfast">Have Breakfast</option>
+            <option value="hydration">Hydration</option>
+            <option value="reading">Reading</option>
+        </select>
+        <button type="submit">Display historical data</button>
+        <!-- <div id=""data-window" class=""data-window">
+            <p>No historical data now. Please select a habit to display.</p>
+        </div> -->
+    </form>
 
     <script>
         const logForm = document.getElementById("logForm");
         //const deleteButton = document.getElementById("deleteButton");
-        //const calendarDiv = document.getElementById("calendar");
+        const histForm = document.getElementById("histForm");
 
         // Log Habit
         logForm.addEventListener("submit", async (e) => {
@@ -76,32 +92,71 @@
             window.location.href = "/";
         });
 
-        // Delete Today's Habit
-        deleteButton.addEventListener("click", async () => {
-            const formData = new FormData(logForm);
-            await fetch('/delete_today_habit', { method: "POST", body: formData });
-            alert("Today's habit deleted!");
+        histdataButton.addEventListener("click", async () => {
+            window.location.href = "/hist_data";
         });
 
-        // Calendar View
-        async function fetchCalendar() {
-            const user_id = document.getElementById("user_id").value;
-            const habit_id = document.getElementById("habit_id").value;
-            const response = await fetch(`/get_calendar_logs?user_id=${user_id}&habit_id=${habit_id}`);
-            const data = await response.json();
+        // // Delete Today's Habit
+        // deleteButton.addEventListener("click", async () => {
+        //     const formData = new FormData(logForm);
+        //     await fetch('/delete_today_habit', { method: "POST", body: formData });
+        //     alert("Today's habit deleted!");
+        // });
 
-            calendarDiv.innerHTML = "";
-            for (let day = 1; day <= 31; day++) {
-                const cell = document.createElement("div");
-                cell.textContent = day;
-                cell.classList.add("day");
-                if (data.logged_days.includes(day)) cell.classList.add("logged");
-                calendarDiv.appendChild(cell);
-            }
+        // display historical data
+        if (!histForm) {
+            console.log("histform not exist")
         }
+        histForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
 
-        logForm.addEventListener("submit", fetchCalendar);
-        deleteButton.addEventListener("click", fetchCalendar);
+            console.log("pressed hist submit button!")
+            // collect data from frontend
+            const formData = new FormData(histForm);
+            const habitId = document.getElementById("hist_habit_id").value;
+            //const dataWindow = document.getElementById("data-window");
+
+            console.log(habitId)
+
+            if (!habitId) {
+                alert("Please select a habit!")
+                console.log("habitId not detected")
+                return;
+            }
+            
+            try {
+                const response = await fetch('/hist_habit', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        habit_id: habitId
+                    })
+                });
+
+                // fetch data
+                const data = await response.json();
+                console.log(data)
+
+                // dataWindow.innerHTML = ''; // clear previous historical data
+                // if (data.length === 0) {
+                //     dataWindow.textContent = 'No historical data available.'
+                // } else {
+                //     data.forEach(item => {
+                //         const p = document.createElement('p')
+                //         p.textContent = `${item.last_log_date}`;
+                //         dataWindow.appendChild(p);
+                //     });
+                // }
+            } catch (error) {
+                console.error('Error grabbing historical data: ', error);
+            }
+        });
+
+        
+
+        //deleteButton.addEventListener("click", fetchCalendar);
     </script>
 </body>
 </html>

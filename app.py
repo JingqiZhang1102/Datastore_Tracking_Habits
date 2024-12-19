@@ -6,9 +6,11 @@ from google.appengine.api import memcache # memcache for efficiency
 from datetime import datetime
 
 import os
-os.environ["GCLOUD_PROJECT"] = "datastore-tutorial-445100"
+# os.environ["GCLOUD_PROJECT"] = "datastore-tutorial-445100"
+os.environ["GCLOUD_PROJECT"] = "datastore-exercise1"
 
 app = Flask(__name__)
+# try to fix memcache RPC call error, not working now
 app.wsgi_app = wrap_wsgi_app(app.wsgi_app)
 
 # for session to record user_id
@@ -29,6 +31,10 @@ def log_page():
 @app.route('/register')
 def register():
     return render_template("register.html")
+
+@app.route('/hist_data')
+def hist_data():
+    return render_template("hist_data.html")
 
 # log daily habit into the database
 @app.route('/log_habit', methods=['POST'])
@@ -70,7 +76,7 @@ def log_habit():
     # Update Streak in Memcache
     # streak = calculate_streak(user_id, habit_id)
     streak = 1
-    memcache.set(key=streak_cache_key, value=streak, time=3600) # save for 1 hr # this is the first place where RPC Call error was raised
+    # memcache.set(key=streak_cache_key, value=streak, time=3600) # save for 1 hr # this is the first place where RPC Call error was raised
 
     # Update Logged Days in Memcache
     # logged_days = memcache.get(month_cache_key) or set()
@@ -86,7 +92,7 @@ def user_register():
     user_id = data.get('user_id')
     user_pwd = data.get('user_pwd')
     
-    print(user_id, user_pwd)
+    # print(user_id, user_pwd)
     
     user_kind = "User"
     
@@ -129,6 +135,33 @@ def user_login():
         session['user_id'] = user_id
         return jsonify({"success": True}), 200
     return jsonify({"success": False, "message": "User ID or Password Incorrect!"}), 404
+
+# try to get historical data
+@app.route('/hist_habit', methods=['POST'])
+def hist_habit():
+    data = request.get_json()
+    print(data)
+    # grab user id from the current session
+    if 'user_id' in session:
+        user_id = session['user_id']
+    else:
+        return jsonify({"success": False, "message": "User ID not properly recorded in session!"}), 404
+    # get habit id from the request
+    habit_id = data.get('habit_id')
+    
+    habit_kind = "HabitLog"
+
+    # check database
+    query = datastore_client.query(kind=habit_kind)
+    query.add_filter(filter=datastore.query.PropertyFilter("user_id", "=", user_id))
+    query.add_filter(filter=datastore.query.PropertyFilter("habit_id", "=", habit_id))
+
+    # Execute the query
+    results = list(query.fetch())
+    data = [{'date': row['last_log_date']} for row in results]
+    return jsonify(data)
+    
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="127.0.0.1", port=8080)
