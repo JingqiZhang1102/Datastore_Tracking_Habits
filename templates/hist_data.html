@@ -3,18 +3,66 @@
 <head>
     <title>History Data</title>
     <style>
-        .day { padding: 10px; text-align: center; border: 1px solid #ddd; }
-        .logged { background-color: lightgreen; }
-        .header { font-weight: bold; }
-        /* .data-window{ max-height: 300px; overflow-y: auto; padding: 10px; background-color: #f9f9f9;} */
+        /* css styles*/
+        /* background */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to bottom right, #dff8b2, #fff5e6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* title */
+        h1 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        /* button */
+        .button-group {
+            margin-top: 15px;
+        }
+
+        button {
+            width: 45%;
+            padding: 10px;
+            margin: 5px;
+            /* border: 1px solid #ddd; */
+            border: none;
+            border-radius: 5px;
+            background-color: #ccf284;
+            color: #2c3e50;
+            font-size: 1em;
+            font-weight: 400;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #b9e36a;
+        }
+
+        /* drop down menu */
+        select {
+            width: 250px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 1em;
+            color: #2c3e50;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <h1></h1>
-
     <!-- Historical Data Display -->
-    <h1>History Data</h1>
     <form id="histForm" method="GET">
+        <h1>History Data</h1>
         <select id="hist_habit_id" required>
             <option value="" disabled selected>Select a Habit</option>
             <option value="exercise">Exercise</option>
@@ -22,11 +70,16 @@
             <option value="hydration">Hydration</option>
             <option value="reading">Reading</option>
         </select>
-        <button type="submit">Display historical data</button>
+        <br/>
+        <button type="submit">Display</button>
+        <button id="returnlogButton">Dashboard</button>
+        <ul id="histList"></ul>
     </form>
 
     <script>
         const histForm = document.getElementById("histForm");
+        const histList = document.getElementById("histList");
+        const returnButton = document.getElementById("returnlogButton");
 
         histForm.addEventListener("submit", async (e) => {
             e.preventDefault();
@@ -56,24 +109,25 @@
                     })
                 });
 
-                // alert(response.ok);
-                // alert(response.status);
-
                 // fetch data
                 const data = await response.json();
 
-                const alert_data = [];
-
-                data.forEach(item => {
-                    alert_data.push(item.date)
+                histList.innerHTML = "";
+                data.forEach((item) => {
+                    const li = document.createElement("li");
+                    const textSpan = document.createElement("span");
+                    textSpan.textContent = item.date;
+                    li.appendChild(textSpan);
+                    histList.appendChild(li);
                 })
-                // the hist data will be printed in the alert pop-up window
-                alert(alert_data)
-
             } catch (error) {
                 alert(error.message);
                 console.error(error.message);
             }
+        });
+
+        returnButton?.addEventListener("click", function(e) {
+            window.location.href = "/log_page";
         });
 
     </script>

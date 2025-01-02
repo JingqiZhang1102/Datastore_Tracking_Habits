@@ -1,2 +1,9 @@
 runtime: python39
-# entrypoint: gunicorn -b :$PORT app:app
+entrypoint: gunicorn -b :$PORT app:app
+app_engine_apis: true
+env_variables:
+    REDIS_HOST: '10.96.233.227'
+    REDIS_PORT: '6379'
+
+vpc_access_connector:
+    name: 'projects/datastore-exercise1/locations/us-central1/connectors/aet-uscentral1-connector-sbnt'

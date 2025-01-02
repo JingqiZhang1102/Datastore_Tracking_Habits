@@ -1,0 +1,135 @@
+/* background */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to bottom right, #bfe6ff, #f7e3fd);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* title */
+h1 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+h3 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+/* input fields */
+input[type="text"], input[type="password"] {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+input[type="date"] {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 1em;
+    width: 90%;
+    box-sizing: border-box;
+}
+
+/* button */
+.button-group {
+    margin-top: 15px;
+}
+
+button {
+    width: 45%;
+    padding: 10px;
+    margin: 5px;
+    /* border: 1px solid #ddd; */
+    border: none;
+    border-radius: 5px;
+    background-color: #b1daf5;
+    color: #2c3e50;
+    font-size: 1em;
+    font-weight: 400;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #85c1e9;
+}
+
+/* drop down menu */
+select {
+    width: 250px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 1em;
+    color: #2c3e50;
+    cursor: pointer;
+}
+
+/* todo-list (todo.html) */
+#todo-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#todo-list li {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px;
+    margin: 5px 0;
+}
+
+#todo-list li span {
+    width: 300px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 10px;
+    white-space: nowrap;
+}
+
+#todo-list li .button-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+}
+
+#todo-list li button {
+    padding: 5px 10px;
+    margin-left: 5px;
+    font-size: 0.9em;
+    border: none;
+    border-radius: 3px;
+    width: 100px;
+}
+
+/* completed-list (completed.html) */
+#completed-list {
+    padding: 0;
+    margin: 0;
+}
+
+#completed-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+    margin: 3px 0;
+}

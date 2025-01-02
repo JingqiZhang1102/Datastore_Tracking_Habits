@@ -3,53 +3,90 @@
 <head>
     <title>Habit Tracker</title>
     <style>
-        .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
-        .day { padding: 10px; text-align: center; border: 1px solid #ddd; }
-        .logged { background-color: lightgreen; }
-        .header { font-weight: bold; }
-        .data-window{ max-height: 300px; overflow-y: auto; padding: 10px; background-color: #f9f9f9;}
+        /* css styles*/
+        /* background */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to bottom right, #dff8b2, #fff5e6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* title */
+        h1 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        /* button */
+        .button-group {
+            margin-top: 15px;
+        }
+
+        button {
+            width: 45%;
+            padding: 10px;
+            margin: 5px;
+            /* border: 1px solid #ddd; */
+            border: none;
+            border-radius: 5px;
+            background-color: #ccf284;
+            color: #2c3e50;
+            font-size: 1em;
+            font-weight: 400;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #b9e36a;
+        }
+
+        /* drop down menu */
+        select {
+            width: 250px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 1em;
+            color: #2c3e50;
+            cursor: pointer;
+        }
     </style>
 </head>
+
 <body>
-    <h1>Habit Tracker</h1>
-    
-    <!-- Log Habit -->
-    <form id="logForm">
-        <!-- Dropdown menu for selecting a habit -->
-        <select id="habit_id" required>
-            <option value="" disabled selected>Select a Habit</option>
-            <option value="exercise">Exercise</option>
-            <option value="breakfast">Have Breakfast</option>
-            <option value="hydration">Hydration</option>
-            <option value="reading">Reading</option>
-        </select>
-        <button type="submit">Log Habit</button>
-    </form>
+    <div>
+        <!-- Log Habit -->
+        <form id="logForm">
+            <h1>Habit Tracker</h1>
+            <!-- Dropdown menu for selecting a habit -->
+            <select id="habit_id" required>
+                <option value="" disabled selected>Select a Habit</option>
+                <option value="exercise">Exercise</option>
+                <option value="breakfast">Have Breakfast</option>
+                <option value="hydration">Hydration</option>
+                <option value="reading">Reading</option>
+            </select>
+            <button type="submit">Log Habit</button>
+        </form>
 
-    <!-- Log Out from Current Account -->
-    <button id="logoutButton">Log Out</button>
+        <!-- Log Out from Current Account -->
+        <button id="logoutButton">Log Out</button>
 
-    <!-- Head to history data page -->
-    <button id="histdataButton">Check History Data</button>
+        <br/>
+        
+        <!-- Head to history data page -->
+        <button id="histdataButton">Check History Data</button>
 
-    <!-- Delete Today's Habit -->
-    <!-- <button id="deleteButton">Delete Today's Habit</button> -->
-
-    <!-- Historical Data Display -->
-    <h1>Historical Data</h1>
-    <form id="histForm">
-        <select id="hist_habit_id" required>
-            <option value="" disabled selected>Select a Habit</option>
-            <option value="exercise">Exercise</option>
-            <option value="breakfast">Have Breakfast</option>
-            <option value="hydration">Hydration</option>
-            <option value="reading">Reading</option>
-        </select>
-        <button type="submit">Display historical data</button>
-        <!-- <div id=""data-window" class=""data-window">
-            <p>No historical data now. Please select a habit to display.</p>
-        </div> -->
-    </form>
+        <!-- Delete Today's Habit -->
+        <!-- <button id="deleteButton">Delete Today's Habit</button> -->
+    </div>
 
     <script>
         const logForm = document.getElementById("logForm");

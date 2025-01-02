@@ -3,19 +3,68 @@
 <head>
     <title>Habit Tracker</title>
     <style>
-        .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
-        .day { padding: 10px; text-align: center; border: 1px solid #ddd; }
-        .logged { background-color: lightgreen; }
-        .header { font-weight: bold; }
+        /* css styles*/
+        /* background */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to bottom right, #dff8b2, #fff5e6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* title */
+        h1 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        /* input fields */
+        input[type="text"], input[type="password"] {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* button */
+        .button-group {
+            margin-top: 15px;
+        }
+
+        button {
+            width: 45%;
+            padding: 10px;
+            margin: 5px;
+            /* border: 1px solid #ddd; */
+            border: none;
+            border-radius: 5px;
+            background-color: #ccf284;
+            color: #2c3e50;
+            font-size: 1em;
+            font-weight: 400;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #b9e36a;
+        }
     </style>
 </head>
 <body>
-    <h1>Habit Tracker</h1>
-    
-    <!-- Log Habit -->
     <form id="regForm">
+        <h1>Habit Tracker</h1>
         <input type="text" id="user_id" placeholder="User ID" required>
-        <input type="text" id="user_pwd" placeholder="Password" required>
+        <input type="password" id="user_pwd" placeholder="Password" required>
         <button type="submit">Register</button>
     </form>
 

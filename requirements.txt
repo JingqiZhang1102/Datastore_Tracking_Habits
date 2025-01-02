@@ -1,4 +1,4 @@
-appengine-python-standard==1.1.9
+appengine-python-standard>=1.0.0
 attrs==24.3.0
 blinker==1.9.0
 cachetools==5.5.0
@@ -17,6 +17,7 @@ google-resumable-media==2.7.2
 googleapis-common-protos==1.66.0
 grpcio==1.68.1
 grpcio-status==1.68.1
+gunicorn==23.0.0
 idna==3.10
 importlib_metadata==8.5.0
 itsdangerous==2.2.0
@@ -29,6 +30,7 @@ protobuf==5.29.1
 pyasn1==0.6.1
 pyasn1_modules==0.4.1
 pytz==2024.2
+redis==5.2.1
 requests==2.32.3
 rsa==4.9
 ruamel.yaml==0.18.6
